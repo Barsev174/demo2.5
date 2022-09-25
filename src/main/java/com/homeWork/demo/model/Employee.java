@@ -17,6 +17,10 @@ public class Employee {
         return lastName;
     }
 
+    public String getFullName() {
+        return getFirstName() + "" + getLastName();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
