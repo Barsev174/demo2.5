@@ -10,34 +10,55 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collection;
+import java.util.List;
 
 @RestController
 @RequestMapping("/employee")
 public class EmployeeController {
-    private final EmployeeService service;
+    private final EmployeeService employeeService;
 
-    public EmployeeController(EmployeeService service) {
-        this.service = service;
+
+    public EmployeeController(EmployeeService employeeService) {
+        this.employeeService = employeeService;
     }
 
     @GetMapping("/add")
-    public Employee addEmployee(@RequestParam String lastName, @RequestParam String firstName) {
-        return service.add(firstName, lastName);
+    public Employee addEmployee(@RequestParam String firstName, @RequestParam String lastName, @RequestParam int department, @RequestParam double salary) {
+        return employeeService.add(firstName, lastName, department, salary);
     }
 
     @GetMapping("/remove")
     public Employee removeEmployee(@RequestParam String lastName, @RequestParam String firstName) {
-        return service.remove(firstName, lastName);
+        return employeeService.remove(firstName, lastName);
     }
 
     @GetMapping("/find")
     public Employee findEmployee(@RequestParam String lastName, @RequestParam String firstName) {
-        return service.find(firstName, lastName);
+        return employeeService.find(firstName, lastName);
     }
 
-    @GetMapping
+    @GetMapping("/findAll")
     public Collection<Employee> findAll() {
-        return service.findAll();
+        return employeeService.findAll();
     }
 
+    @GetMapping("/departments/max-salary")
+    public Employee findMaxSalary(@RequestParam int department) {
+        return employeeService.findMaxSalary(department);
+    }
+
+    @GetMapping("/departments/min-salary")
+    public Employee findMinSalary(@RequestParam int department) {
+        return employeeService.findMinSalary(department);
+    }
+
+    @GetMapping("/departments")
+    public List<Employee>  allEmployeeOfDepartments(@RequestParam int department) {
+        return employeeService.allEmployeeOfDepartments(department);
+    }
+
+    @GetMapping("/departments/all")
+    public Collection<Employee> allEmployeeByDepartment() {
+        return employeeService.allEmployeeByDepartment();
+    }
 }
