@@ -102,7 +102,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public Collection<Employee> allEmployeeByDepartment() {
-        return null;
+        return Collections.unmodifiableCollection(employees.values()
+                .stream().sorted(Comparator.comparingInt(e->e.getDepartment()))
+                .collect(Collectors.toList()));
     }
 
 }
