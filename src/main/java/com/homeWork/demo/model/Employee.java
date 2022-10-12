@@ -1,5 +1,10 @@
 package com.homeWork.demo.model;
+import org.springframework.util.StringUtils;
+
 import java.util.Objects;
+
+import static org.springframework.util.StringUtils.*;
+
 public class Employee {
     private final String firstName ;
     private final String lastName ;
@@ -7,17 +12,12 @@ public class Employee {
     private double salary;
 
     public Employee(String firstName, String lastName, int department, double salary) {
-        this.firstName = firstName;
-        this.lastName = lastName;
+        this.firstName = capitalize(firstName.toLowerCase());
+        this.lastName = capitalize(lastName.toLowerCase());
         this.department = department;
         this.salary = salary;
     }
 
-    public Employee(String firstName, String lastName) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-
-    }
 
     public String getFirstName() {
         return firstName;
@@ -53,6 +53,8 @@ public class Employee {
         return "Employee{" +
                 "firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
+                ", department'" + department+ '\''+
+                ", salary'" + salary+ '\''+
                 '}';
     }
 

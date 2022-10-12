@@ -2,12 +2,16 @@ package com.homeWork.demo.service;
 
 import com.homeWork.demo.exception.EmployeeNotFoundException;
 import com.homeWork.demo.exception.EmployeeAlreadyAddedException;
+import com.homeWork.demo.exception.InvalidInputExeption;
 import com.homeWork.demo.model.Employee;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static org.apache.commons.lang3.StringUtils.*;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
@@ -41,8 +45,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public Employee add(String firstName, String lastName, int department, double salary) {
+        validateInput(firstName,lastName);
         Employee employee = new Employee(firstName, lastName, department, salary);
-        List<Employee> listEmployee = new ArrayList<>(employees.values());
         if (employees.containsKey(employee.getFullName())) {
             throw new EmployeeAlreadyAddedException();
         }
@@ -53,10 +57,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public Employee remove(String firstName, String lastName) {
-        Employee employee = new Employee(firstName, lastName);
+        String key = getKey(firstName,lastName);
         String fullName = firstName + " " + lastName;
-        if (employees.containsKey(employee.getFullName())) {
-            return employees.remove(employee.getFullName());
+        validateInput(firstName,lastName);
+        if (employees.containsKey(key)) {
+            return employees.remove(key);
         }
         throw new EmployeeNotFoundException();
 
@@ -64,10 +69,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public Employee find(String firstName, String lastName) {
-        Employee employee = new Employee(firstName, lastName);
+        String key = getKey(firstName,lastName);
         List<Employee> listEmployee = new ArrayList<>(employees.values());
+        validateInput(firstName,lastName);
         Optional<Employee> optional = listEmployee.stream()
-                .filter(e -> e.getFullName().equals(employee.getFullName()))
+                .filter(e -> e.getFullName().equals(key))
                 .findAny();
         return optional.orElseThrow();
     }
@@ -106,5 +112,12 @@ public class EmployeeServiceImpl implements EmployeeService {
                 .stream().sorted(Comparator.comparingInt(e->e.getDepartment()))
                 .collect(Collectors.toList()));
     }
-
+    private void validateInput(String firstName, String lastName){
+        if (!(isAlpha(firstName) && isAlpha(lastName))) {
+            throw new InvalidInputExeption();
+        }
+    }
+    private String getKey(String firstName, String lastName) {
+        return firstName + " " + lastName;
+    }
 }
