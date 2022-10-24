@@ -12,11 +12,4 @@ public interface EmployeeService    {
 
     Collection<Employee> findAll();
 
-    Employee findMaxSalary(int department);
-
-    Employee findMinSalary(int department);
-
-    List<Employee> allEmployeeOfDepartments(int department);
-
-    Collection<Employee> allEmployeeByDepartment();
-}
+  }

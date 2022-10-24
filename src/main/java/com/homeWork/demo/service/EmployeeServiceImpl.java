@@ -15,7 +15,7 @@ import static org.apache.commons.lang3.StringUtils.*;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
-    Map<String, Employee> employees = new HashMap<>(Map.of(
+    public Map<String, Employee> employees = new HashMap<>(Map.of(
             "VasjPupkin",
             new Employee(
                     "Vasj",
@@ -83,35 +83,6 @@ public class EmployeeServiceImpl implements EmployeeService {
         return Collections.unmodifiableCollection(employees.values());
     }
 
-    @Override
-    public Employee findMaxSalary(int department) {
-        return employees.values().stream()
-                .filter(e -> e.getDepartment() == department)
-                .max(Comparator.comparingDouble(e -> e.getSalary()))
-                .orElseThrow();
-    }
-
-    @Override
-    public Employee findMinSalary(int department) {
-        return employees.values().stream()
-                .filter(e -> e.getDepartment() == department)
-                .min(Comparator.comparingDouble(e -> e.getSalary()))
-                .orElseThrow();
-    }
-
-    @Override
-    public List<Employee> allEmployeeOfDepartments(int department) {
-        return employees.values().stream()
-                .filter(e -> e.getDepartment() == department)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public Collection<Employee> allEmployeeByDepartment() {
-        return Collections.unmodifiableCollection(employees.values()
-                .stream().sorted(Comparator.comparingInt(e->e.getDepartment()))
-                .collect(Collectors.toList()));
-    }
     private void validateInput(String firstName, String lastName){
         if (!(isAlpha(firstName) && isAlpha(lastName))) {
             throw new InvalidInputExeption();
