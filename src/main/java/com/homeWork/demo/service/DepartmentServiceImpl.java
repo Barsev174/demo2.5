@@ -1,5 +1,6 @@
 package com.homeWork.demo.service;
 
+import com.homeWork.demo.exception.EmployeeNotFoundException;
 import com.homeWork.demo.model.Employee;
 import org.springframework.stereotype.Service;
 
@@ -17,30 +18,30 @@ public class DepartmentServiceImpl implements DepartmentService{
 
     @Override
     public Employee findMaxSalary(int department) {
-        return employeeService.findAll().stream()
+        return employeeService.getAll().stream()
                 .filter(e -> e.getDepartment() == department)
-                .max(Comparator.comparingDouble(e -> e.getSalary()))
-                .orElseThrow();
+                .max(Comparator.comparingDouble(Employee::getSalary))
+                .orElseThrow(EmployeeNotFoundException::new);
     }
 
     @Override
     public Employee findMinSalary(int department) {
-        return employeeService.findAll().stream()
+        return employeeService.getAll().stream()
                 .filter(e -> e.getDepartment() == department)
-                .min(Comparator.comparingDouble(e -> e.getSalary()))
-                .orElseThrow();
+                .min(Comparator.comparingDouble(Employee::getSalary))
+                .orElseThrow(EmployeeNotFoundException::new);
     }
 
     @Override
     public List<Employee> allEmployeeOfDepartments(int department) {
-            return employeeService.findAll().stream()
+            return employeeService.getAll().stream()
                 .filter(e -> e.getDepartment() == department)
                 .collect(Collectors.toList());
     }
 
     @Override
     public Map<Integer, List<Employee>> allEmployeeByDepartment() {
-        return employeeService.findAll().stream()
+        return employeeService.getAll().stream()
                 .collect(Collectors.groupingBy(Employee::getDepartment));
     }
 }
